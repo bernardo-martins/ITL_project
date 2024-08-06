@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: anikatze
+      POSTGRES_DB: anikatze_postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  migrate:
+    build:
+      context: ./AnikatzeDbProject
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=db;Database=anikatze_postgres;Username=postgres;Password=anikatze
+    depends_on:
+      - db
+    command: ["dotnet", "AnikatzeDbProject.dll"]
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=db;Database=anikatze_postgres;Username=postgres;Password=anikatze
+    ports:
+      - "5169:8080"
+    depends_on:
+      - db
+      - migrate
+
+  frontend:
+    build:
+      context: ./vue-project
+      dockerfile: Dockerfile
+    ports:
+      - "5173:80"
+    environment:
+      VUE_APP_API_BASE_URL: "http://backend:8080/api"
+    depends_on:
+      - backend
+
+volumes:
+  db_data:
+
