@@ -34,12 +34,13 @@ export default {
         async performLogin() {
             const userCredentials = { email: this.email, password: this.password, rememberMe: this.rememberMe };
             let foundUser = null;
+            console.log("do it hereeee------");
             for (let i = 0; i < this.usersbe.length; i++) {
                 if (this.usersbe[i].username === this.email) {
                     foundUser = { 
                         guid: this.usersbe[i].userGuid, 
                         email: this.usersbe[i].username, 
-                        password: this.usersbe[i].password, 
+                        password: this.usersbe[i].password,
                         rememberMe: this.rememberMe 
                     };
                     break; // beendet die Schleife, wenn der Benutzer gefunden ist
@@ -83,7 +84,7 @@ export default {
                     </div>
                     <a class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">Forgot password?</a>
                 </div>
-                <Button label="Sign In" icon="pi pi-user" class="w-full" @click="performLogin"></Button>
+                <Button label="Log In" icon="pi pi-user" class="w-full" @click="performLogin"></Button>
             </div>
         </div>
     </div>
