@@ -22,7 +22,7 @@ export default {
         // Durch axios.baseUrl wird der Pfad /api und bei Bedarf https://localhost:5000 
         // automatisch vorangestellt
         const userGuid = this.getUserGuid();
-        const response = await axios.get(`users/${userGuid}`);
+        const response = await axios.get('users/${userGuid}/courses');
         this.courses = response.data;
         console.log(this.courses);
     },
@@ -38,7 +38,7 @@ export default {
         },
         async startCourse(course) {
         try {
-        const response = await axios.get(`lections/${course.courseGuid}`);
+        const response = await axios.get('lections/${course.courseGuid}');
         if (response.data.length > 0) {
             const firstLectionGuid = response.data[0].lectionGuid;
             this.$router.push({ name: 'CoursePage', params: { courseGuid: course.courseGuid, lectionGuid: firstLectionGuid }});

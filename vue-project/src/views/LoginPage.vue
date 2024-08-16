@@ -20,7 +20,8 @@ export default {
             rememberMe: false,
             foundUser: null,
             checked1: false,
-            usersbe: [] // Add usersbe to data
+            usersbe: [],
+            errorMessage: '' // Add usersbe to data
         };
     },
     async mounted() {
@@ -32,9 +33,9 @@ export default {
     methods: {
         ...mapActions(['login']),
         async performLogin() {
+
             const userCredentials = { email: this.email, password: this.password, rememberMe: this.rememberMe };
             let foundUser = null;
-            console.log("do it hereeee------");
             for (let i = 0; i < this.usersbe.length; i++) {
                 if (this.usersbe[i].username === this.email) {
                     foundUser = { 
@@ -50,11 +51,24 @@ export default {
             // Überprüfe, ob ein Benutzer gefunden wurde
             if (foundUser) {
                 this.guid = foundUser.guid; // Aktualisiere die Komponenten-guid
-                this.login(foundUser);
-                console.log(this.guid, this.email, this.password, this.rememberMe);
-                this.$router.push('/offers');
+
+                    this.login(foundUser);
+                    console.log(this.guid, this.email, this.password, this.rememberMe);
+                    this.$router.push('/offers');
+
             } else {
                 console.log("Benutzer nicht gefunden");
+            }
+        },
+        async performSignIn() {
+            try {
+                const userCredentials = { email: this.email, password: this.password, rememberMe: this.rememberMe };
+                console.log('Sign in with:', userCredentials);
+                this.login(userCredentials);
+                console.log(this.guid, this.email, this.password, this.rememberMe);
+                this.$router.push('/offers');
+            } catch (error) {
+                this.errorMessage = 'Error during sign-in: ' + error.message;
             }
         }
     }
@@ -85,6 +99,9 @@ export default {
                     <a class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">Forgot password?</a>
                 </div>
                 <Button label="Log In" icon="pi pi-user" class="w-full" @click="performLogin"></Button>
+                </br>
+                <Button label="Sign In and Log In" icon="pi pi-user" class="w-full" @click="performSignIn"></Button>
+
             </div>
         </div>
     </div>

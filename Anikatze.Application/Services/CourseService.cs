@@ -43,8 +43,7 @@ namespace Anikatze.Application.Services
         {
             var courseDto = Courses
                 .Where(c => c.CourseGuid == courseGuid)
-                .Select(c => new CourseDto(
-                                       c.CourseID, c.Name,c.Price))
+                .Select(c => new CourseDto(c.CourseID, c.Name,c.Price))
                 .FirstOrDefault();
             return courseDto;
         }

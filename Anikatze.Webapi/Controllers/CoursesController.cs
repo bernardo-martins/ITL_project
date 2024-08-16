@@ -26,7 +26,12 @@ namespace Anikatze.Webapi.Controllers
         [HttpGet("{courseGuid}")]
         public IActionResult GetCourses(string courseGuid)
         {
-            return Ok(_service.GetCourseByCourseGuid(courseGuid));
+            var item = _service.GetCourseByCourseGuid(courseGuid);
+            if(item == null) {
+                var response = new { Message = "Course not found", CourseGuid = courseGuid };
+                return NotFound(response);
+            }
+            return Ok(item);
         }
 
         [HttpPost]
