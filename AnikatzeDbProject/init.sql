@@ -1,5 +1,4 @@
 -- Create the database if it does not exist
-
 SELECT pg_terminate_backend(procpid) FROM pg_stat_activity WHERE datname = 'mydb';
 
 DROP DATABASE anikatze_postgres;

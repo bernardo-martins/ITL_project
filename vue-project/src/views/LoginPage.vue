@@ -5,6 +5,8 @@ import Button from 'primevue/button';
 import { mapActions } from 'vuex';
 import axios from 'axios';
 
+axios.defaults.baseURL = 'http://localhost:5169';
+
 export default {
     name: 'LoginPage',
     components: {
@@ -21,13 +23,13 @@ export default {
             foundUser: null,
             checked1: false,
             usersbe: [],
-            errorMessage: '' // Add usersbe to data
+            errorMessage: '',// Add usersbe to data
         };
     },
     async mounted() {
         // Durch axios.baseUrl wird der Pfad /api und bei Bedarf https://localhost:5000 
         // automatisch vorangestellt
-        const response = await axios.get('users');
+        const response = await u;
         this.usersbe = response.data;
     },
     methods: {
@@ -37,7 +39,7 @@ export default {
             const userCredentials = { email: this.email, password: this.password, rememberMe: this.rememberMe };
             let foundUser = null;
             for (let i = 0; i < this.usersbe.length; i++) {
-                if (this.usersbe[i].username === this.email) {
+                if ((this.usersbe[i].username === userCredentials.username || this.usersbe[i].email === userCredentials.email))) {
                     foundUser = { 
                         guid: this.usersbe[i].userGuid, 
                         email: this.usersbe[i].username, 
@@ -51,24 +53,12 @@ export default {
             // Überprüfe, ob ein Benutzer gefunden wurde
             if (foundUser) {
                 this.guid = foundUser.guid; // Aktualisiere die Komponenten-guid
-
-                    this.login(foundUser);
-                    console.log(this.guid, this.email, this.password, this.rememberMe);
-                    this.$router.push('/offers');
-
-            } else {
-                console.log("Benutzer nicht gefunden");
-            }
-        },
-        async performSignIn() {
-            try {
-                const userCredentials = { email: this.email, password: this.password, rememberMe: this.rememberMe };
-                console.log('Sign in with:', userCredentials);
-                this.login(userCredentials);
+                this.login(foundUser);
                 console.log(this.guid, this.email, this.password, this.rememberMe);
                 this.$router.push('/offers');
-            } catch (error) {
-                this.errorMessage = 'Error during sign-in: ' + error.message;
+            } else {
+                console.log("Benutzer nicht gefunden");
+                // this.errorMessage = "Login failed. Please check your credentials.";
             }
         }
     }
@@ -99,8 +89,7 @@ export default {
                     <a class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">Forgot password?</a>
                 </div>
                 <Button label="Log In" icon="pi pi-user" class="w-full" @click="performLogin"></Button>
-                </br>
-                <Button label="Sign In and Log In" icon="pi pi-user" class="w-full" @click="performSignIn"></Button>
+                <div v-if="errorMessage" class="text-red-500 mt-3">{{ errorMessage }}</div> <!-- Add warning message -->
 
             </div>
         </div>

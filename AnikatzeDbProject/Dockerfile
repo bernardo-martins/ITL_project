@@ -33,4 +33,4 @@ HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 \
 # Start the application and execute the SQL script if the database is empty
 ENTRYPOINT ["sh", "-c", "until pg_isready -h db -U postgres; do echo 'Waiting for database...'; sleep 2; done; \
 PGPASSWORD=anikatze createdb -h db -U postgres anikatze_postgres || echo 'Database already exists'; \
-PGPASSWORD=anikatze psql -h db -U postgres -d anikatze_postgres -f /docker-entrypoint-initdb.d/init.sql && dotnet AnikatzeDbProject.dll"]
+PGPASSWORD=anikatze psql -h db -U postgres -d anikatze_postgres -f /docker-entrypoint-initdb.d/init.sql && dotnet AnikatzeDbProject.dll && dotnet run --project /src/MockDataGenerator.csproj"]
