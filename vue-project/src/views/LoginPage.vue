@@ -39,7 +39,7 @@ export default {
             const userCredentials = { email: this.email, password: this.password, rememberMe: this.rememberMe };
             let foundUser = null;
             for (let i = 0; i < this.usersbe.length; i++) {
-                if ((this.usersbe[i].username === userCredentials.username || this.usersbe[i].email === userCredentials.email))) {
+                if ((this.usersbe[i].username === userCredentials.username || this.usersbe[i].email === userCredentials.email)) {
                     foundUser = { 
                         guid: this.usersbe[i].userGuid, 
                         email: this.usersbe[i].username, 
